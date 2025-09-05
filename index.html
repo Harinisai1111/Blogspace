@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BlogSpace - Modern Blog Platform</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f8fafc;
+    }
+
+    .app {
+      min-height: 100vh;
+    }
+
+    .header {
+      background: white;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-brand {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #3b82f6;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .nav-brand:hover {
+      color: #2563eb;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn--primary {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .btn--primary:hover {
+      background: #2563eb;
+    }
+
+    .btn--secondary {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .btn--secondary:hover {
+      background: #d1d5db;
+    }
+
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .post-card {
+      background: white;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid #e2e8f0;
+    }
+
+    .post-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .post-card h3 {
+      color: #1f2937;
+      margin-bottom: 0.75rem;
+      font-size: 1.25rem;
+      line-height: 1.4;
+    }
+
+    .post-card p {
+      color: #6b7280;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .post-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.875rem;
+      color: #9ca3af;
+    }
+
+    .post-view {
+      background: white;
+      border-radius: 0.75rem;
+      padding: 2rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .post-view .back-link {
+      color: #3b82f6;
+      text-decoration: none;
+      margin-bottom: 2rem;
+      display: inline-block;
+      font-weight: 500;
+    }
+
+    .post-view .back-link:hover {
+      color: #2563eb;
+    }
+
+    .post-view h1 {
+      font-size: 2.5rem;
+      color: #1f2937;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .post-view .post-meta-full {
+      color: #6b7280;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .post-view .post-content {
+      font-size: 1.125rem;
+      line-height: 1.7;
+      color: #374151;
+    }
+
+    .post-view .post-content p {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-container {
+      background: white;
+      border-radius: 0.75rem;
+      padding: 2rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .form-container h2 {
+      margin-bottom: 2rem;
+      color: #1f2937;
+    }
+
+    .form-container input,
+    .form-container textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      font-family: inherit;
+    }
+
+    .form-container textarea {
+      min-height: 200px;
+      resize: vertical;
+    }
+
+    .form-container input:focus,
+    .form-container textarea:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .nav {
+        padding: 0 1rem;
+      }
+
+      .main-content {
+        padding: 1rem;
+      }
+
+      .posts-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .post-view h1 {
+        font-size: 2rem;
+      }
+
+      .form-actions {
+        flex-direction: column-reverse;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const { useState, useEffect, useCallback } = React;
+
+    // --- Sample Data ---
+    const initialPosts = [
+      {
+        id: "1",
+        title: "Getting Started with React Hooks",
+        content: "React Hooks allow you to use state and other React features without class components. They provide a more direct API to the React concepts you already know: props, state, context, refs, and lifecycle.\n\nThe useState Hook lets you add React state to function components. When you call useState, it returns a pair: the current state value and a function that lets you update it.\n\nHooks are functions that let you 'hook into' React state and lifecycle features from function components. React provides a few built-in Hooks like useState and useEffect.",
+        author: "John Doe",
+        timestamp: "2024-08-30T10:30:00Z"
+      },
+      {
+        id: "2",
+        title: "Building Responsive Web Applications",
+        content: "Creating responsive apps is essential in today's multi-device world. A mobile-first approach ensures good user experience across all screen sizes.\n\nStart by designing for the smallest screen first, then progressively enhance for larger screens. This approach helps you focus on the most important content and features.\n\nUse CSS Grid and Flexbox for flexible layouts that adapt to different screen sizes. These modern CSS features provide powerful tools for creating responsive designs without relying on heavy frameworks.",
+        author: "Jane Smith",
+        timestamp: "2024-08-29T14:15:00Z"
+      },
+      {
+        id: "3",
+        title: "Modern JavaScript Best Practices",
+        content: "JavaScript has evolved significantly over the years. Here are some modern best practices to follow in your projects.\n\nUse const and let instead of var. Const should be your default choice for variables that won't be reassigned, while let should be used for variables that will change.\n\nEmbrace arrow functions for cleaner syntax, especially in callbacks and array methods. However, be mindful of their behavior with 'this' binding.",
+        author: "Alex Johnson",
+        timestamp: "2024-08-28T09:45:00Z"
+      }
+    ];
+
+    // --- Utilities ---
+    const generateId = () => Date.now().toString();
+    const formatDate = date => new Date(date).toLocaleDateString();
+    const truncateText = (text, maxLength = 150) => 
+      text.length <= maxLength ? text : text.substr(0, maxLength) + '...';
+    const calculateReadingTime = text => Math.ceil(text.split(/\s+/).length / 200);
+    const formatContent = content => 
+      content.split('\n').map((p, i) => p.trim() && React.createElement('p', { key: i }, p.trim()));
+
+    // --- Navigation ---
+    const Navigation = ({ currentUser, onNavigate, currentView }) => (
+      <header className="header">
+        <nav className="nav">
+          <div className="nav-brand" onClick={() => onNavigate('home')}>
+            BlogSpace
+          </div>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            {currentView !== 'home' && (
+              <button className="btn btn--secondary" onClick={() => onNavigate('home')}>
+                Home
+              </button>
+            )}
+            <button 
+              className="btn btn--primary" 
+              onClick={() => onNavigate(currentUser ? 'createPost' : 'login')}
+            >
+              {currentUser ? 'Create Post' : 'Login'}
+            </button>
+          </div>
+        </nav>
+      </header>
+    );
+
+    // --- PostCard ---
+    const PostCard = ({ post, onViewPost }) => (
+      <div className="post-card" onClick={() => onViewPost(post.id)}>
+        <h3>{post.title}</h3>
+        <p>{truncateText(post.content)}</p>
+        <div className="post-meta">
+          <span>By {post.author}</span>
+          <span>{formatDate(post.timestamp)} • {calculateReadingTime(post.content)} min read</span>
+        </div>
+      </div>
+    );
+
+    // --- PostView ---
+    const PostView = ({ post, onBack }) => (
+      <div className="post-view">
+        <a href="#" className="back-link" onClick={(e) => { e.preventDefault(); onBack(); }}>
+          ← Back to posts
+        </a>
+        <h1>{post.title}</h1>
+        <div className="post-meta-full">
+          By {post.author} • {formatDate(post.timestamp)} • {calculateReadingTime(post.content)} min read
+        </div>
+        <div className="post-content">
+          {formatContent(post.content)}
+        </div>
+      </div>
+    );
+
+    // --- PostForm ---
+    const PostForm = ({ onSubmit, onCancel }) => {
+      const [title, setTitle] = useState('');
+      const [content, setContent] = useState('');
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        if (title.trim() && content.trim()) {
+          onSubmit({
+            id: generateId(),
+            title: title.trim(),
+            content: content.trim(),
+            author: 'You',
+            timestamp: new Date().toISOString()
+          });
+          setTitle('');
+          setContent('');
+        }
+      };
+
+      return (
+        <div className="form-container">
+          <h2>Create New Post</h2>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Enter your post title..."
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+            <textarea
+              placeholder="Write your post content here..."
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              required
+            />
+            <div className="form-actions">
+              <button type="button" className="btn btn--secondary" onClick={onCancel}>
+                Cancel
+              </button>
+              <button type="submit" className="btn btn--primary">
+                Publish Post
+              </button>
+            </div>
+          </form>
+        </div>
+      );
+    };
+
+    // --- Main App ---
+    const App = () => {
+      const [posts, setPosts] = useState(initialPosts);
+      const [currentUser, setCurrentUser] = useState({ id: "1", name: "You" });
+      const [currentView, setCurrentView] = useState('home');
+      const [selectedPostId, setSelectedPostId] = useState(null);
+
+      const handleViewPost = (postId) => {
+        setSelectedPostId(postId);
+        setCurrentView('post');
+      };
+
+      const handleBack = () => {
+        setSelectedPostId(null);
+        setCurrentView('home');
+      };
+
+      const handleCreatePost = (newPost) => {
+        setPosts(prev => [newPost, ...prev]);
+        setCurrentView('home');
+      };
+
+      const handleNavigate = (view) => {
+        setCurrentView(view);
+        if (view === 'home') {
+          setSelectedPostId(null);
+        }
+      };
+
+      const selectedPost = posts.find(p => p.id === selectedPostId);
+
+      return (
+        <div className="app">
+          <Navigation 
+            currentUser={currentUser} 
+            onNavigate={handleNavigate} 
+            currentView={currentView}
+          />
+          <main className="main-content">
+            {currentView === 'home' && (
+              <div className="posts-grid">
+                {posts.map(post => (
+                  <PostCard 
+                    key={post.id} 
+                    post={post} 
+                    onViewPost={handleViewPost}
+                  />
+                ))}
+              </div>
+            )}
+            {currentView === 'post' && selectedPost && (
+              <PostView post={selectedPost} onBack={handleBack} />
+            )}
+            {currentView === 'createPost' && (
+              <PostForm 
+                onSubmit={handleCreatePost} 
+                onCancel={() => setCurrentView('home')}
+              />
+            )}
+          </main>
+        </div>
+      );
+    };
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
